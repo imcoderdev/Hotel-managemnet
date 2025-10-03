@@ -7,10 +7,11 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Edit, Trash2, LogOut, ChefHat, Receipt } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, ChefHat, Receipt, QrCode, History } from "lucide-react";
 import { getCurrentOwner, logoutOwner, getAllMenuItems, addMenuItem, updateMenuItem, deleteMenuItem, initializeSampleData } from "@/lib/localStorage";
 import { MenuItem } from "@/types";
 import { toast } from "sonner";
+import { QRCodeSVG } from "qrcode.react";
 
 const OwnerDashboard = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const OwnerDashboard = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [showQRCode, setShowQRCode] = useState(false);
+  const [shopUrl, setShopUrl] = useState("");
 
   // Form state
   const [formName, setFormName] = useState("");
@@ -40,6 +43,10 @@ const OwnerDashboard = () => {
     
     // Load menu items
     loadMenuItems();
+    
+    // Generate shop URL for QR code
+    const url = `${window.location.origin}/shop/${currentOwner.id}/table-select`;
+    setShopUrl(url);
   }, [navigate]);
 
   // Load menu items from localStorage
@@ -149,9 +156,17 @@ const OwnerDashboard = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
+              <Button variant="outline" onClick={() => navigate("/owner/history")}>
+                <History className="mr-2 h-4 w-4" />
+                History
+              </Button>
               <Button variant="outline" onClick={() => navigate("/owner/orders")}>
                 <Receipt className="mr-2 h-4 w-4" />
-                View Orders
+                Orders
+              </Button>
+              <Button variant="outline" onClick={() => setShowQRCode(!showQRCode)}>
+                <QrCode className="mr-2 h-4 w-4" />
+                QR Code
               </Button>
               <Button variant="ghost" onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
@@ -164,6 +179,25 @@ const OwnerDashboard = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* QR Code Section */}
+        {showQRCode && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Your Shop QR Code</CardTitle>
+              <CardDescription>Customers can scan this to order directly</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center space-y-4">
+              <div className="bg-white p-6 rounded-lg">
+                <QRCodeSVG value={shopUrl} size={256} />
+              </div>
+              <p className="text-sm text-muted-foreground text-center max-w-md">
+                Print this QR code and place it on tables. When customers scan it, they'll go directly to table selection and menu.
+              </p>
+              <Button onClick={() => window.print()} variant="outline">Print QR Code</Button>
+            </CardContent>
+          </Card>
+        )}
+        
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-3xl font-bold mb-2">Menu Management</h2>

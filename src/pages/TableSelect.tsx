@@ -1,6 +1,6 @@
 // Customer table selection page
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -8,7 +8,15 @@ import { ArrowLeft, UtensilsCrossed } from "lucide-react";
 
 const TableSelect = () => {
   const navigate = useNavigate();
+  const { ownerId } = useParams();
   const [selectedTable, setSelectedTable] = useState<number | null>(null);
+  
+  // If coming from QR code, store the owner ID
+  useEffect(() => {
+    if (ownerId) {
+      sessionStorage.setItem("ownerId", ownerId);
+    }
+  }, [ownerId]);
 
   // Generate table numbers 1-20
   const tableNumbers = Array.from({ length: 20 }, (_, i) => i + 1);

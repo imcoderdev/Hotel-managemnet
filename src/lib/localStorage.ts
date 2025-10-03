@@ -128,7 +128,37 @@ export function getAllOrders(): Order[] {
   return safeJSONParse<Order[]>(STORAGE_KEYS.ORDERS, []);
 }
 
-export function createOrder(tableNumber: number, items: any[], total: number): Order {
+export function getOrdersByDateRange(startDate: Date, endDate: Date): Order[] {
+  const orders = getAllOrders();
+  return orders.filter(order => {
+    const orderDate = new Date(order.createdAt);
+    return orderDate >= startDate && orderDate <= endDate;
+  });
+}
+
+export function getOrdersByOwner(ownerId: string): Order[] {
+  const orders = getAllOrders();
+  return orders.filter(order => order.ownerId === ownerId);
+}
+
+export function getDailyOrderStats(ownerId: string) {
+  const orders = getOrdersByOwner(ownerId);
+  const dailyStats: Record<string, { orders: Order[], totalRevenue: number, orderCount: number }> = {};
+  
+  orders.forEach(order => {
+    const date = new Date(order.createdAt).toLocaleDateString();
+    if (!dailyStats[date]) {
+      dailyStats[date] = { orders: [], totalRevenue: 0, orderCount: 0 };
+    }
+    dailyStats[date].orders.push(order);
+    dailyStats[date].totalRevenue += order.total;
+    dailyStats[date].orderCount += 1;
+  });
+  
+  return dailyStats;
+}
+
+export function createOrder(tableNumber: number, items: any[], total: number, ownerId?: string): Order {
   const orders = getAllOrders();
   
   const newOrder: Order = {
@@ -138,6 +168,7 @@ export function createOrder(tableNumber: number, items: any[], total: number): O
     total,
     status: 'pending',
     createdAt: new Date().toISOString(),
+    ownerId: ownerId || getCurrentOwner()?.id,
   };
 
   orders.push(newOrder);

@@ -27,4 +27,5 @@ export interface Order {
   total: number;
   status: 'pending' | 'completed';
   createdAt: string;
+  ownerId?: string;
 }

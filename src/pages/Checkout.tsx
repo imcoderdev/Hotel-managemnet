@@ -43,8 +43,11 @@ const Checkout = () => {
     // Simulate payment processing
     setTimeout(() => {
       try {
+        // Get ownerId if available
+        const ownerId = sessionStorage.getItem("ownerId") || undefined;
+        
         // Create order in localStorage
-        const order = createOrder(tableNumber, cart, total);
+        const order = createOrder(tableNumber, cart, total, ownerId);
         
         // Clear cart from sessionStorage
         sessionStorage.removeItem("cart");

@@ -11,6 +11,7 @@ import CustomerMenu from "./pages/CustomerMenu";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
 import Orders from "./pages/Orders";
+import OrderHistory from "./pages/OrderHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,9 +30,11 @@ const App = () => (
           <Route path="/owner/login" element={<OwnerLogin />} />
           <Route path="/owner/dashboard" element={<OwnerDashboard />} />
           <Route path="/owner/orders" element={<Orders />} />
+          <Route path="/owner/history" element={<OrderHistory />} />
           
           {/* Customer Routes */}
           <Route path="/customer/table" element={<TableSelect />} />
+          <Route path="/shop/:ownerId/table-select" element={<TableSelect />} />
           <Route path="/customer/menu" element={<CustomerMenu />} />
           <Route path="/customer/checkout" element={<Checkout />} />
           <Route path="/customer/confirmation/:orderId" element={<Confirmation />} />
