@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChefHat, UtensilsCrossed } from "lucide-react";
 import heroImage from "@/assets/hero-food.jpg";
+import customersImage from "@/assets/customers.jpg";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -38,8 +39,8 @@ const Landing = () => {
               className="p-8 flex flex-col items-center text-center space-y-6"
               onClick={() => navigate("/customer/table")}
             >
-              <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-smooth">
-                <UtensilsCrossed className="w-12 h-12 text-primary" />
+              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20 group-hover:scale-110 transition-smooth">
+                <img src={customersImage} alt="Happy customers" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h2 className="text-3xl font-bold mb-2">I'm a Customer</h2>
