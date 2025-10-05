@@ -25,7 +25,7 @@ export interface Order {
   tableNumber: number;
   items: CartItem[];
   total: number;
-  status: 'pending' | 'completed';
+  status: 'waiting' | 'accepted' | 'preparing' | 'on-the-way' | 'completed';
   createdAt: string;
   ownerId?: string;
 }

@@ -166,7 +166,7 @@ export function createOrder(tableNumber: number, items: any[], total: number, ow
     tableNumber,
     items,
     total,
-    status: 'pending',
+    status: 'waiting',
     createdAt: new Date().toISOString(),
     ownerId: ownerId || getCurrentOwner()?.id,
   };
@@ -176,7 +176,7 @@ export function createOrder(tableNumber: number, items: any[], total: number, ow
   return newOrder;
 }
 
-export function updateOrderStatus(id: string, status: 'pending' | 'completed'): boolean {
+export function updateOrderStatus(id: string, status: Order['status']): boolean {
   const orders = getAllOrders();
   const order = orders.find(o => o.id === id);
   
@@ -189,12 +189,15 @@ export function updateOrderStatus(id: string, status: 'pending' | 'completed'): 
 
 // ============ INITIALIZATION ============
 
-// Initialize with sample data if needed
+// Initialize with sample data if needed (optional - can be disabled)
 export function initializeSampleData(): void {
+  // Leave menu empty by default - owner should add their own items
+  // Uncomment below to add sample data
+  
+  /*
   const items = getAllMenuItems();
   
   if (items.length === 0) {
-    // Add sample menu items
     const sampleItems = [
       {
         name: 'Classic Burger',
@@ -236,4 +239,5 @@ export function initializeSampleData(): void {
 
     sampleItems.forEach(item => addMenuItem(item));
   }
+  */
 }

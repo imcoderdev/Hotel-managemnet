@@ -38,6 +38,13 @@ All colors MUST be HSL.
     /* Success: Fresh green */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
+    
+    /* Status colors for order tracking */
+    --status-waiting: 45 93% 47%;
+    --status-accepted: 221 83% 53%;
+    --status-preparing: 262 83% 58%;
+    --status-on-the-way: 24 95% 53%;
+    --status-completed: 142 76% 36%;
 
     /* Destructive: Red for delete actions */
     --destructive: 0 84% 60%;

@@ -27,6 +27,7 @@ const OwnerDashboard = () => {
   const [formDescription, setFormDescription] = useState("");
   const [formPrice, setFormPrice] = useState("");
   const [formImage, setFormImage] = useState("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   // Check authentication and load menu
   useEffect(() => {
@@ -69,6 +70,7 @@ const OwnerDashboard = () => {
     setFormDescription("");
     setFormPrice("");
     setFormImage("");
+    setImagePreview(null);
     setIsDialogOpen(true);
   };
 
@@ -79,7 +81,22 @@ const OwnerDashboard = () => {
     setFormDescription(item.description);
     setFormPrice(item.price.toString());
     setFormImage(item.image);
+    setImagePreview(item.image);
     setIsDialogOpen(true);
+  };
+
+  // Handle image capture/upload
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImagePreview(result);
+        setFormImage(result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Handle form submission (add or edit)
@@ -255,15 +272,29 @@ const OwnerDashboard = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="image">Image URL (optional)</Label>
-                  <Input
-                    id="image"
-                    type="text"
-                    placeholder="/src/assets/your-image.jpg"
-                    value={formImage}
-                    onChange={(e) => setFormImage(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground">Leave blank to use default image</p>
+                  <Label htmlFor="image">Food Image</Label>
+                  <div className="space-y-3">
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={handleImageChange}
+                      className="cursor-pointer"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Tap to use camera or select from gallery
+                    </p>
+                    {imagePreview && (
+                      <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-primary/20">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex space-x-2">
